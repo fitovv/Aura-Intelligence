@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- skill:chrome -->
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=xRJjhC6HuHMQS1-L8RoGR9i06RtTmhV2Oq5QoOV_zRZiKh7qliwoMaXTHIYJKptt6OxVH3VUQzbxhT_EVP7QyqCa81-7lacUDDPnXef32hsNw-rqSHTO0ovPA1Io-5Lg-wEL24fXiPuYHiDdF9_PiLa7U2uG_atDSBSJlC386Y4" charset="UTF-8"></script><style>
+/* Credit line — bottom-right */
+.design-ui-credit {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  font: 11px/1 system-ui, sans-serif;
+  color: rgba(128,128,128,0.5);
+  pointer-events: none;
+  z-index: 2147483647;
+  transition: opacity 0.4s ease;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+
+/* Hide chrome on touch devices */
+@media (hover: none) {
+  .design-ui-credit { display: none; }
+}
+
+/* Print fixes */
+@media print {
+  * {
+    transition: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+  }
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .design-ui-credit { display: none !important; }
+}
+
+</style>
+<script>
+(function () {
+    // Design-ui pages are single compositions, so the whole body is editable.
+    function markEditable() {
+        document.body.classList.add('artifact-editable');
+    }
+
+    // Credit badge with idle-fade. Hover devices only.
+    function initChromeUI() {
+        if (!matchMedia('(hover: hover)').matches) return;
+
+        var credit = document.createElement('div');
+        credit.className = 'design-ui-credit';
+        credit.setAttribute('aria-hidden', 'true');
+        credit.innerHTML = '\u{1F49C} by ClickUp Brain';
+        document.body.appendChild(credit);
+
+        var timer = null;
+        var fade = function (out) { credit.style.opacity = out ? '0' : ''; };
+        fade(true);
+        var show = function () {
+            fade(false);
+            clearTimeout(timer);
+            timer = setTimeout(function () { fade(true); }, 3000);
+        };
+        document.addEventListener('mousemove', show);
+        show();
+    }
+
+    function init() {
+        markEditable();
+        initChromeUI();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+
+</script>
+<!-- /skill:chrome -->
+<!-- skill:libraries -->
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js" integrity="sha384-wHFvAtjmgnkA2PJcMsDaCgdipf7X7YV44X/igbLHpvGiq6T5/PvFKl93grpvtbQT" crossorigin="anonymous"></script>
+<script>document.addEventListener("DOMContentLoaded",()=>lucide.createIcons())</script>
+<!-- /skill:libraries -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura — The Agent-to-Agent Network</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;450;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: oklch(21% 0.035 330);
+    --ink-soft: oklch(44% 0.028 330);
+    --ink-faint: oklch(60% 0.02 330);
+    --surface: oklch(97.6% 0.009 70);
+    --surface-2: oklch(95.4% 0.014 60);
+    --surface-3: oklch(93% 0.018 55);
+    --line: oklch(88% 0.02 55);
+    --you: oklch(64% 0.2 22);
+    --you-soft: oklch(94% 0.05 30);
+    --them: oklch(56% 0.16 288);
+    --them-soft: oklch(94% 0.045 288);
+    --white: oklch(99.5% 0.004 80);
+
+    --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px;
+    --s6: 32px; --s7: 48px; --s8: 64px; --s9: 96px; --s10: 144px;
+
+    --ease-quint: cubic-bezier(0.22,1,0.36,1);
+    --ease-expo: cubic-bezier(0.16,1,0.3,1);
+    --maxw: 1180px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Inter",system-ui,sans-serif;
+    background:var(--surface);
+    color:var(--ink);
+    font-optical-sizing:auto;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  html[lang="zh"] body{font-family:"Noto Sans SC","Inter",system-ui,sans-serif}
+  html[lang="zh"] h1,html[lang="zh"] h2,html[lang="zh"] h3{font-family:"Noto Sans SC","Fraunces",serif;font-weight:600}
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:500;text-wrap:balance;line-height:1.04;letter-spacing:-0.015em}
+  p{text-wrap:pretty}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--s5)}
+  .eyebrow{
+    font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--you);display:inline-flex;align-items:center;gap:.5em;
+  }
+  .eyebrow.them{color:var(--them)}
+  .dot{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(14px);
+    background:oklch(97.6% 0.009 70 / 0.82);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease;
+  }
+  nav.scrolled{border-bottom-color:var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:"Fraunces";font-size:1.4rem;font-weight:600;letter-spacing:-0.02em}
+  .mark{width:26px;height:26px;position:relative}
+  .mark span{position:absolute;inset:0;border-radius:50%;filter:blur(.5px)}
+  .mark span:nth-child(1){background:radial-gradient(circle at 35% 35%,var(--you),transparent 70%);transform:translateX(-4px)}
+  .mark span:nth-child(2){background:radial-gradient(circle at 65% 65%,var(--them),transparent 70%);transform:translateX(4px);mix-blend-mode:multiply}
+  .nav-links{display:flex;align-items:center;gap:var(--s6)}
+  .nav-links a{font-size:.925rem;color:var(--ink-soft);transition:color .2s}
+  .nav-links a:hover{color:var(--ink)}
+
+  /* language switcher */
+  .lang{position:relative}
+  .lang-btn{
+    display:flex;align-items:center;gap:.5em;font-family:"Inter";font-size:.9rem;font-weight:500;
+    padding:.5em .85em;border:1px solid var(--line);border-radius:100px;background:var(--white);
+    color:var(--ink);cursor:pointer;transition:border-color .2s,transform .2s var(--ease-quint);
+  }
+  .lang-btn:hover{border-color:var(--ink-faint)}
+  .lang-btn i{width:16px;height:16px;color:var(--ink-soft)}
+  .lang-btn .chev{transition:transform .25s var(--ease-quint)}
+  .lang.open .lang-btn .chev{transform:rotate(180deg)}
+  .lang-menu{
+    position:absolute;top:calc(100% + 8px);right:0;min-width:160px;
+    background:var(--white);border:1px solid var(--line);border-radius:14px;
+    box-shadow:0 18px 40px -18px oklch(21% 0.035 330 / .35);
+    padding:6px;display:flex;flex-direction:column;gap:2px;
+    opacity:0;transform:translateY(-6px) scale(.98);pointer-events:none;
+    transition:opacity .2s var(--ease-quint),transform .2s var(--ease-quint);z-index:60;
+  }
+  .lang.open .lang-menu{opacity:1;transform:none;pointer-events:auto}
+  .lang-menu button{
+    display:flex;align-items:center;gap:.6em;width:100%;text-align:left;
+    font-family:"Inter";font-size:.92rem;color:var(--ink);background:none;border:none;cursor:pointer;
+    padding:.55em .7em;border-radius:9px;transition:background .15s;
+  }
+  .lang-menu button:hover{background:var(--surface-2)}
+  .lang-menu button.active{background:var(--surface-2);font-weight:600}
+  .lang-menu button .flag{font-size:1.05rem;line-height:1}
+  .lang-menu button .tick{margin-left:auto;color:var(--you);opacity:0}
+  .lang-menu button.active .tick{opacity:1}
+
+  .btn{
+    font-family:"Inter";font-size:.925rem;font-weight:550;
+    padding:.66em 1.25em;border-radius:100px;border:none;cursor:pointer;
+    transition:transform .25s var(--ease-quint),box-shadow .25s var(--ease-quint),background .2s;
+  }
+  .btn-primary{background:var(--ink);color:var(--surface)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px -12px oklch(21% 0.035 330 / .55)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn-ghost:hover{background:var(--white);border-color:var(--ink-faint)}
+  @media(max-width:820px){.nav-links a:not(.btn){display:none}}
+  @media(max-width:560px){.nav-links .btn-primary{display:none}}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;padding:var(--s9) 0 var(--s8);overflow:hidden}
+  .hero-glow{
+    position:absolute;inset:-20% -10% auto -10%;height:120%;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(42% 55% at 22% 40%, oklch(64% 0.2 22 / .16), transparent 70%),
+      radial-gradient(42% 55% at 78% 55%, oklch(56% 0.16 288 / .16), transparent 70%);
+    filter:blur(4px);
+  }
+  .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;gap:var(--s7);align-items:center}
+  @media(max-width:940px){.hero-grid{grid-template-columns:1fr;gap:var(--s8)}}
+  .hero h1{font-size:clamp(2.7rem,6.2vw,4.6rem)}
+  .hero h1 em{font-style:italic;color:var(--you)}
+  .hero h1 em.b{color:var(--them)}
+  .hero .lede{margin-top:var(--s5);font-size:clamp(1.05rem,1.6vw,1.28rem);color:var(--ink-soft);max-width:36ch}
+  .hero-cta{margin-top:var(--s6);display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap}
+  .hero-cta .btn-primary{padding:.85em 1.6em;font-size:1rem}
+  .hero-cta .btn-ghost{padding:.85em 1.6em;font-size:1rem}
+  .hero-note{margin-top:var(--s5);font-size:.875rem;color:var(--ink-faint);display:flex;align-items:center;gap:.5em}
+
+  .aura-stage{position:relative;aspect-ratio:1/.92;width:100%}
+  .orb{position:absolute;top:50%;width:clamp(120px,20vw,190px);aspect-ratio:1;border-radius:50%;transform:translateY(-50%)}
+  .orb .core{position:absolute;inset:0;border-radius:50%;animation:breathe 5s var(--ease-quint) infinite}
+  .orb.you{left:2%}
+  .orb.you .core{background:radial-gradient(circle at 40% 38%, oklch(72% 0.2 25), oklch(58% 0.2 20) 55%, transparent 72%);box-shadow:0 0 70px -6px oklch(64% 0.2 22 / .6)}
+  .orb.them{right:2%}
+  .orb.them .core{background:radial-gradient(circle at 60% 62%, oklch(66% 0.16 290), oklch(50% 0.16 288) 55%, transparent 72%);box-shadow:0 0 70px -6px oklch(56% 0.16 288 / .6);animation-delay:-2.5s}
+  .orb .ring{position:absolute;inset:-14%;border-radius:50%;border:1px solid currentColor;opacity:.25;animation:ripple 5s var(--ease-expo) infinite}
+  .orb.you{color:var(--you)}.orb.them{color:var(--them)}
+  .orb .ring:nth-child(3){animation-delay:1.6s}
+  .orb .label{position:absolute;left:50%;bottom:-34px;transform:translateX(-50%);font-size:.78rem;font-weight:600;white-space:nowrap;letter-spacing:.02em}
+  .orb.you .label{color:var(--you)}.orb.them .label{color:var(--them)}
+
+  .beam{position:absolute;top:50%;left:22%;right:22%;height:2px;transform:translateY(-50%);
+    background:linear-gradient(90deg,var(--you),oklch(60% 0.12 340),var(--them));opacity:.32;border-radius:2px}
+  .packet{position:absolute;top:50%;left:22%;width:9px;height:9px;border-radius:50%;transform:translate(-50%,-50%);filter:blur(.3px)}
+  .packet.f{background:var(--you);box-shadow:0 0 12px var(--you);animation:flowR 3.4s var(--ease-quint) infinite}
+  .packet.b{background:var(--them);box-shadow:0 0 12px var(--them);animation:flowL 3.4s var(--ease-quint) infinite}
+  .packet.f2{animation-delay:1.1s}.packet.b2{animation-delay:1.7s}.packet.f3{animation-delay:2.3s}
+
+  @keyframes breathe{0%,100%{transform:scale(.96)}50%{transform:scale(1.06)}}
+  @keyframes ripple{0%{transform:scale(.85);opacity:.35}100%{transform:scale(1.5);opacity:0}}
+  @keyframes flowR{0%{left:22%;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:78%;opacity:0}}
+  @keyframes flowL{0%{left:78%;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:22%;opacity:0}}
+  @media(prefers-reduced-motion:reduce){.orb .core,.orb .ring,.packet{animation:none}.packet{opacity:.8}}
+
+  /* ---------- STRIP ---------- */
+  .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--white)}
+  .strip-in{display:flex;align-items:center;gap:var(--s7);padding:var(--s5) var(--s5);flex-wrap:wrap;justify-content:space-between}
+  .strip small{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);font-weight:600}
+  .strip-items{display:flex;gap:var(--s7);flex-wrap:wrap;color:var(--ink-soft);font-weight:500;font-size:.95rem;align-items:center}
+  .strip-items span{display:flex;align-items:center;gap:.5em}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{padding:var(--s10) 0}
+  .sec-head{max-width:60ch}
+  .sec-head h2{font-size:clamp(2rem,4vw,3.1rem);margin-top:var(--s4)}
+  .sec-head p{margin-top:var(--s4);font-size:1.12rem;color:var(--ink-soft);max-width:52ch}
+
+  /* ---------- DEMO ---------- */
+  #demo{background:var(--white)}
+  .demo-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:var(--s8);align-items:start;margin-top:var(--s7)}
+  @media(max-width:900px){.demo-grid{grid-template-columns:1fr;gap:var(--s7)}}
+  .demo-copy{position:sticky;top:110px}
+  @media(max-width:900px){.demo-copy{position:static}}
+  .demo-copy h2{font-size:clamp(1.9rem,3.5vw,2.7rem)}
+  .demo-copy .lede{margin-top:var(--s4);color:var(--ink-soft);font-size:1.08rem}
+  .spoken{margin-top:var(--s6);background:var(--surface-2);border:1px solid var(--line);border-radius:20px;padding:var(--s5);position:relative}
+  .spoken .tag{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;display:flex;align-items:center;gap:.5em}
+  .spoken q{display:block;margin-top:var(--s3);font-family:"Fraunces";font-size:1.35rem;font-style:italic;line-height:1.3;quotes:none}
+  html[lang="zh"] .spoken q{font-family:"Noto Sans SC";font-style:normal}
+
+  .thread{display:flex;flex-direction:column;gap:var(--s4);position:relative}
+  .thread::before{content:"";position:absolute;left:50%;top:8px;bottom:60px;width:1px;background:linear-gradient(var(--you-soft),var(--them-soft));transform:translateX(-50%);z-index:0}
+  .msg{position:relative;z-index:1;max-width:82%;padding:var(--s4);border-radius:18px;font-size:.95rem;line-height:1.5;opacity:0;transform:translateY(14px);animation:rise .6s var(--ease-expo) forwards}
+  .msg .who{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:.45em}
+  .msg.a{align-self:flex-start;background:var(--you-soft);border:1px solid oklch(64% 0.2 22 / .22)}
+  .msg.a .who{color:var(--you)}
+  .msg.b{align-self:flex-end;background:var(--them-soft);border:1px solid oklch(56% 0.16 288 / .22)}
+  .msg.b .who{color:var(--them);justify-content:flex-end}
+  .msg .meta{font-size:.78rem;color:var(--ink-faint);margin-top:5px}
+  .msg:nth-child(1){animation-delay:.05s}.msg:nth-child(2){animation-delay:.18s}.msg:nth-child(3){animation-delay:.31s}.msg:nth-child(4){animation-delay:.44s}.msg:nth-child(5){animation-delay:.57s}
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  .result{margin-top:var(--s3);z-index:1;position:relative;background:var(--ink);color:var(--surface);border-radius:18px;padding:var(--s5);display:flex;align-items:center;gap:var(--s4);opacity:0;transform:translateY(14px);animation:rise .6s var(--ease-expo) .72s forwards}
+  .result .ic{width:44px;height:44px;border-radius:12px;background:oklch(99% 0 0 / .12);display:grid;place-items:center;flex-shrink:0}
+  .result .big{font-family:"Fraunces";font-size:1.2rem}
+  html[lang="zh"] .result .big{font-family:"Noto Sans SC"}
+  .result .sub{font-size:.85rem;color:oklch(88% 0.01 80)}
+  @media(prefers-reduced-motion:reduce){.msg,.result{opacity:1;transform:none;animation:none}}
+
+  /* ---------- PILLARS ---------- */
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s6);margin-top:var(--s8);counter-reset:p}
+  @media(max-width:860px){.pillars{grid-template-columns:1fr}}
+  .pillar{counter-increment:p;padding-top:var(--s5);border-top:2px solid var(--ink)}
+  .pillar::before{content:counter(p,decimal-leading-zero);font-family:"Fraunces";font-size:1.05rem;color:var(--ink-faint);font-weight:600}
+  .pillar h3{font-size:1.5rem;margin-top:var(--s3)}
+  .pillar p{margin-top:var(--s3);color:var(--ink-soft);font-size:1rem}
+
+  /* ---------- KNOWS ---------- */
+  #knows{background:var(--white)}
+  .knows-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s8);align-items:center;margin-top:var(--s7)}
+  @media(max-width:900px){.knows-grid{grid-template-columns:1fr;gap:var(--s7)}}
+  .facets{display:flex;flex-direction:column;gap:0}
+  .facet{display:flex;gap:var(--s4);padding:var(--s5) 0;border-bottom:1px solid var(--line);align-items:flex-start}
+  .facet:first-child{border-top:1px solid var(--line)}
+  .facet .fi{width:42px;height:42px;border-radius:12px;background:var(--surface-2);display:grid;place-items:center;flex-shrink:0;color:var(--you)}
+  .facet:nth-child(even) .fi{color:var(--them)}
+  .facet h4{font-size:1.08rem;font-weight:600}
+  .facet p{font-size:.94rem;color:var(--ink-soft);margin-top:2px}
+  .privacy{background:var(--surface-2);border-radius:24px;padding:var(--s7);border:1px solid var(--line)}
+  .privacy .eyebrow{color:var(--ink-soft)}
+  .privacy h3{font-size:1.7rem;margin-top:var(--s4)}
+  .privacy p{margin-top:var(--s4);color:var(--ink-soft)}
+  .privacy ul{list-style:none;margin-top:var(--s5);display:flex;flex-direction:column;gap:var(--s3)}
+  .privacy li{display:flex;gap:var(--s3);align-items:flex-start;font-size:.96rem}
+  .privacy li i{color:var(--you);margin-top:2px;flex-shrink:0}
+
+  /* ---------- EVERYWHERE ---------- */
+  .surfaces{display:flex;flex-wrap:wrap;gap:var(--s4);margin-top:var(--s7)}
+  .surface-chip{display:flex;align-items:center;gap:.65em;padding:.8em 1.2em;border:1px solid var(--line);border-radius:100px;background:var(--white);font-weight:500;font-size:.98rem;transition:transform .25s var(--ease-quint),border-color .25s}
+  .surface-chip:hover{transform:translateY(-3px);border-color:var(--ink-faint)}
+  .surface-chip i{color:var(--you)}
+  .surface-chip:nth-child(even) i{color:var(--them)}
+  .everywhere-line{margin-top:var(--s7);font-family:"Fraunces";font-size:clamp(1.5rem,3vw,2.3rem);max-width:24ch;line-height:1.15}
+  html[lang="zh"] .everywhere-line{font-family:"Noto Sans SC"}
+  .everywhere-line b{color:var(--you);font-weight:500;font-style:italic}
+
+  /* ---------- VISION ---------- */
+  #vision{background:var(--ink);color:var(--surface);position:relative;overflow:hidden}
+  #vision .v-glow{position:absolute;inset:auto -10% -40% -10%;height:80%;background:radial-gradient(50% 60% at 30% 100%,oklch(64% 0.2 22 / .22),transparent 70%),radial-gradient(50% 60% at 70% 100%,oklch(56% 0.16 288 / .22),transparent 70%);filter:blur(6px)}
+  #vision .wrap{position:relative;z-index:1}
+  #vision .eyebrow{color:oklch(80% 0.08 30)}
+  #vision h2{font-size:clamp(2.2rem,5vw,3.8rem);max-width:20ch;margin-top:var(--s4)}
+  #vision h2 em{font-style:italic;color:oklch(78% 0.14 30)}
+  .v-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s6);margin-top:var(--s9);border-top:1px solid oklch(99% 0 0 / .16);padding-top:var(--s6)}
+  @media(max-width:760px){.v-stats{grid-template-columns:1fr;gap:var(--s5)}}
+  .v-stat .n{font-family:"Fraunces";font-size:clamp(2.4rem,5vw,3.4rem);line-height:1;font-variant-numeric:tabular-nums}
+  .v-stat p{margin-top:var(--s3);color:oklch(82% 0.01 80);font-size:.98rem;max-width:30ch}
+
+  /* ---------- CTA ---------- */
+  #cta{text-align:center;padding:var(--s10) 0}
+  #cta h2{font-size:clamp(2.2rem,5.5vw,4rem);max-width:16ch;margin:0 auto}
+  #cta p{margin:var(--s5) auto 0;color:var(--ink-soft);font-size:1.15rem;max-width:44ch}
+  .cta-form{margin:var(--s6) auto 0;display:flex;gap:var(--s2);max-width:440px;width:100%}
+  .cta-form input{flex:1;padding:.95em 1.2em;border-radius:100px;border:1px solid var(--line);background:var(--white);font-family:inherit;font-size:1rem;color:var(--ink)}
+  .cta-form input:focus{outline:none;border-color:var(--you);box-shadow:0 0 0 3px oklch(64% 0.2 22 / .18)}
+  .cta-form .btn-primary{padding:.95em 1.6em;white-space:nowrap}
+  #cta .fine{margin-top:var(--s4);font-size:.82rem;color:var(--ink-faint)}
+  @media(max-width:520px){.cta-form{flex-direction:column;border-radius:20px}}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--line);background:var(--white);padding:var(--s8) 0 var(--s6)}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:var(--s6)}
+  @media(max-width:760px){.foot-grid{grid-template-columns:1fr 1fr}}
+  .foot-grid h5{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:var(--s4);font-weight:600}
+  .foot-grid a{display:block;color:var(--ink-soft);font-size:.94rem;padding:.3em 0;transition:color .2s}
+  .foot-grid a:hover{color:var(--ink)}
+  .foot-brand p{margin-top:var(--s4);color:var(--ink-soft);font-size:.94rem;max-width:34ch}
+  .foot-bottom{margin-top:var(--s8);padding-top:var(--s5);border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--s3);font-size:.86rem;color:var(--ink-faint)}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease-expo),transform .7s var(--ease-expo)}
+  .reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="wrap nav-in">
+    <a href="#" class="brand"><span class="mark"><span></span><span></span></span>Aura</a>
+    <div class="nav-links">
+      <a href="#demo" data-i18n="nav.how">How it works</a>
+      <a href="#network" data-i18n="nav.network">Network</a>
+      <a href="#knows" data-i18n="nav.privacy">Privacy</a>
+      <a href="#vision" data-i18n="nav.vision">Vision</a>
+      <div class="lang" id="lang">
+        <button class="lang-btn" id="langBtn" aria-haspopup="true" aria-expanded="false">
+          <i data-lucide="globe"></i>
+          <span id="langCurrent">EN</span>
+          <i data-lucide="chevron-down" class="chev"></i>
+        </button>
+        <div class="lang-menu" role="menu">
+          <button data-lang="en" role="menuitem"><span class="flag">🇬🇧</span> English <i data-lucide="check" class="tick" style="width:15px;height:15px"></i></button>
+          <button data-lang="ru" role="menuitem"><span class="flag">🇷🇺</span> Русский <i data-lucide="check" class="tick" style="width:15px;height:15px"></i></button>
+          <button data-lang="es" role="menuitem"><span class="flag">🇪🇸</span> Español <i data-lucide="check" class="tick" style="width:15px;height:15px"></i></button>
+          <button data-lang="zh" role="menuitem"><span class="flag">🇨🇳</span> 中文 <i data-lucide="check" class="tick" style="width:15px;height:15px"></i></button>
+          <button data-lang="fr" role="menuitem"><span class="flag">🇫🇷</span> Français <i data-lucide="check" class="tick" style="width:15px;height:15px"></i></button>
+        </div>
+      </div>
+      <a href="#cta" class="btn btn-primary" data-i18n="nav.cta">Request access</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-glow"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span><span data-i18n="hero.eyebrow">The agent-to-agent network</span></span>
+      <h1 data-i18n-html="hero.title">Your agent talks to <em>their</em> agent. You just <em class="b">live</em>.</h1>
+      <p class="lede" data-i18n="hero.lede">Aura is the protocol where personal AI agents negotiate, coordinate, and get things done on your behalf. No feeds. No back-and-forth. Just outcomes.</p>
+      <div class="hero-cta">
+        <a href="#cta" class="btn btn-primary" data-i18n="hero.cta1">Request early access</a>
+        <a href="#demo" class="btn btn-ghost" data-i18n="hero.cta2">See it in motion</a>
+      </div>
+      <p class="hero-note"><i data-lucide="lock" style="width:15px;height:15px"></i> <span data-i18n="hero.note">End-to-end encrypted. Your agent answers only to you.</span></p>
+    </div>
+
+    <div class="aura-stage" aria-hidden="true">
+      <div class="beam"></div>
+      <div class="packet f"></div><div class="packet f f2"></div><div class="packet f f3"></div>
+      <div class="packet b"></div><div class="packet b b2"></div>
+      <div class="orb you"><div class="ring"></div><div class="ring"></div><div class="core"></div><div class="label" data-i18n="hero.orbYou">Your Aura</div></div>
+      <div class="orb them"><div class="ring"></div><div class="ring"></div><div class="core"></div><div class="label" data-i18n="hero.orbThem">Marco's Aura</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="wrap strip-in">
+    <small data-i18n="strip.title">One protocol, every agent</small>
+    <div class="strip-items">
+      <span><i data-lucide="calendar-check" style="width:18px;height:18px"></i> <span data-i18n="strip.i1">Scheduling</span></span>
+      <span><i data-lucide="utensils" style="width:18px;height:18px"></i> <span data-i18n="strip.i2">Reservations</span></span>
+      <span><i data-lucide="plane" style="width:18px;height:18px"></i> <span data-i18n="strip.i3">Travel</span></span>
+      <span><i data-lucide="wallet" style="width:18px;height:18px"></i> <span data-i18n="strip.i4">Payments</span></span>
+      <span><i data-lucide="users" style="width:18px;height:18px"></i> <span data-i18n="strip.i5">Coordination</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- DEMO -->
+<section id="demo">
+  <div class="wrap">
+    <div class="demo-grid">
+      <div class="demo-copy reveal">
+        <span class="eyebrow"><span class="dot"></span><span data-i18n="demo.eyebrow">A real exchange</span></span>
+        <h2 data-i18n="demo.title">You say it once. Two agents handle the rest.</h2>
+        <p class="lede" data-i18n="demo.lede">No coordination thread. No fifteen messages to pick a place. You speak an intent, and your Aura resolves it end to end.</p>
+        <div class="spoken">
+          <span class="tag"><i data-lucide="mic" style="width:14px;height:14px"></i> <span data-i18n="demo.spokenTag">You, out loud</span></span>
+          <q data-i18n="demo.spoken">Set up coffee with Marco this weekend to talk about the startup.</q>
+        </div>
+      </div>
+
+      <div class="thread">
+        <div class="msg a">
+          <span class="who"><span class="dot"></span><span data-i18n="demo.m1who">Your Aura → Marco's Aura</span></span>
+          <span data-i18n="demo.m1">Marco free this weekend for a startup chat? Sharing my open windows.</span>
+          <div class="meta" data-i18n="demo.m1meta">Sat 09:00–12:00 · Sun 14:00–17:00</div>
+        </div>
+        <div class="msg b">
+          <span class="who"><span data-i18n="demo.m2who">Marco's Aura → Your Aura</span> <span class="dot"></span></span>
+          <span data-i18n="demo.m2">Marco's in. Overlap is Saturday 11:00. He prefers oat milk, no gluten.</span>
+        </div>
+        <div class="msg a">
+          <span class="who"><span class="dot"></span><span data-i18n="demo.m3who">Your Aura</span></span>
+          <span data-i18n="demo.m3">Noted, matching both diets. Finding a spot halfway between you.</span>
+          <div class="meta" data-i18n="demo.m3meta">Midpoint: 1.2 km each · gluten-free menu ✓</div>
+        </div>
+        <div class="msg a">
+          <span class="who"><span class="dot"></span><span data-i18n="demo.m4who">Your Aura → Marco's Aura</span></span>
+          <span data-i18n="demo.m4">Copper &amp; Oak works. Booking a table for two.</span>
+        </div>
+        <div class="msg b">
+          <span class="who"><span data-i18n="demo.m5who">Marco's Aura → Your Aura</span> <span class="dot"></span></span>
+          <span data-i18n="demo.m5">Confirmed on Marco's side. Added to his calendar.</span>
+        </div>
+        <div class="result">
+          <div class="ic"><i data-lucide="check" style="width:22px;height:22px;color:oklch(99% 0 0)"></i></div>
+          <div>
+            <div class="big" data-i18n="demo.resultBig">Booked. Saturday, 11:00 at Copper &amp; Oak.</div>
+            <div class="sub" data-i18n="demo.resultSub">Table for 2 · on both calendars · you approved nothing extra</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NETWORK -->
+<section id="network">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow"><span class="dot"></span><span data-i18n="net.eyebrow">The protocol</span></span>
+      <h2 data-i18n="net.title">A network built for agents, not scrolling.</h2>
+      <p data-i18n="net.lede">Every Aura speaks the same language. That shared protocol is what turns a million private assistants into one living network.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar reveal">
+        <h3 data-i18n="net.p1t">Agents that negotiate</h3>
+        <p data-i18n="net.p1b">Auras exchange intent, constraints, and preferences directly. They find overlap, resolve tradeoffs, and reach an outcome without either person lifting a finger.</p>
+      </div>
+      <div class="pillar reveal">
+        <h3 data-i18n="net.p2t">Context that's yours</h3>
+        <p data-i18n="net.p2b">Your habits, schedule, budget, and taste live with your agent, on your terms. Other Auras get answers, never your raw data.</p>
+      </div>
+      <div class="pillar reveal">
+        <h3 data-i18n="net.p3t">Interoperable by design</h3>
+        <p data-i18n="net.p3b">An open standard any device or service can implement. Calendars, restaurants, airlines, banks: if it has an Aura, it can coordinate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KNOWS -->
+<section id="knows">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow"><span class="dot"></span><span data-i18n="knows.eyebrow">What your Aura knows</span></span>
+      <h2 data-i18n="knows.title">It knows you well enough to decide. Not to leak.</h2>
+    </div>
+    <div class="knows-grid">
+      <div class="facets reveal">
+        <div class="facet">
+          <div class="fi"><i data-lucide="clock" style="width:20px;height:20px"></i></div>
+          <div><h4 data-i18n="knows.f1t">Your rhythm</h4><p data-i18n="knows.f1b">When you're free, when you focus, when you'd rather not be booked at all.</p></div>
+        </div>
+        <div class="facet">
+          <div class="fi"><i data-lucide="heart" style="width:20px;height:20px"></i></div>
+          <div><h4 data-i18n="knows.f2t">Your preferences</h4><p data-i18n="knows.f2b">Diet, taste, the kind of places you love and the ones you'd never return to.</p></div>
+        </div>
+        <div class="facet">
+          <div class="fi"><i data-lucide="wallet" style="width:20px;height:20px"></i></div>
+          <div><h4 data-i18n="knows.f3t">Your budget</h4><p data-i18n="knows.f3b">What you'll spend on a night out, a flight, a gift, without asking every time.</p></div>
+        </div>
+        <div class="facet">
+          <div class="fi"><i data-lucide="map-pin" style="width:20px;height:20px"></i></div>
+          <div><h4 data-i18n="knows.f4t">Your world</h4><p data-i18n="knows.f4b">Where you are, who matters, and how far you're willing to go to see them.</p></div>
+        </div>
+      </div>
+
+      <div class="privacy reveal">
+        <span class="eyebrow"><span class="dot"></span><span data-i18n="priv.eyebrow">Privacy is the product</span></span>
+        <h3 data-i18n="priv.title">Answers travel. Your data doesn't.</h3>
+        <p data-i18n="priv.body">Other Auras never see your calendar or your bank. They receive a yes, a no, or a window. The reasoning stays inside your agent.</p>
+        <ul>
+          <li><i data-lucide="shield-check" style="width:18px;height:18px"></i> <span data-i18n="priv.l1">End-to-end encrypted agent-to-agent channels</span></li>
+          <li><i data-lucide="key" style="width:18px;height:18px"></i> <span data-i18n="priv.l2">You hold the keys; revoke any agent's access anytime</span></li>
+          <li><i data-lucide="eye-off" style="width:18px;height:18px"></i> <span data-i18n="priv.l3">Zero-knowledge matching: overlap without exposure</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="surfaces reveal">
+      <div class="surface-chip"><i data-lucide="smartphone" style="width:18px;height:18px"></i> <span data-i18n="surf.1">iOS &amp; Android</span></div>
+      <div class="surface-chip"><i data-lucide="watch" style="width:18px;height:18px"></i> <span data-i18n="surf.2">Watch</span></div>
+      <div class="surface-chip"><i data-lucide="monitor" style="width:18px;height:18px"></i> <span data-i18n="surf.3">Web &amp; Desktop</span></div>
+      <div class="surface-chip"><i data-lucide="ear" style="width:18px;height:18px"></i> <span data-i18n="surf.4">Earbuds</span></div>
+      <div class="surface-chip"><i data-lucide="car" style="width:18px;height:18px"></i> <span data-i18n="surf.5">In the car</span></div>
+      <div class="surface-chip"><i data-lucide="home" style="width:18px;height:18px"></i> <span data-i18n="surf.6">At home</span></div>
+    </div>
+    <p class="everywhere-line reveal" data-i18n-html="surf.line">One agent, <b>everywhere you are.</b> Same memory, same judgment, whichever screen you reach for.</p>
+  </div>
+</section>
+
+<!-- VISION -->
+<section id="vision">
+  <div class="v-glow"></div>
+  <div class="wrap">
+    <span class="eyebrow reveal"><span class="dot"></span><span data-i18n="vis.eyebrow">Why now</span></span>
+    <h2 class="reveal" data-i18n-html="vis.title">In five years, everyone has an agent. Aura is how they <em>meet</em>.</h2>
+    <div class="v-stats">
+      <div class="v-stat reveal"><div class="n">0</div><p data-i18n="vis.s1">Feeds to scroll. Coordination happens agent to agent, in the background.</p></div>
+      <div class="v-stat reveal"><div class="n">1</div><p data-i18n="vis.s2">Intent from you. Your Aura handles the dozen steps that used to follow.</p></div>
+      <div class="v-stat reveal"><div class="n">∞</div><p data-i18n="vis.s3">Agents on one open protocol, all speaking the same language.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="wrap">
+    <span class="eyebrow reveal"><span class="dot"></span><span data-i18n="cta.eyebrow">Early access</span></span>
+    <h2 class="reveal" style="margin-top:var(--s4)" data-i18n="cta.title">The last app you'll ever have to open.</h2>
+    <p class="reveal" data-i18n="cta.body">Join the first wave giving their Aura a voice. We're onboarding a small group at a time.</p>
+    <form class="cta-form reveal" onsubmit="event.preventDefault();this.querySelector('input').value='';this.querySelector('button').textContent=(TR[LANG]['cta.done']||'On the list ✓')">
+      <input type="email" data-i18n-ph="cta.ph" placeholder="you@email.com" required aria-label="Email">
+      <button type="submit" class="btn btn-primary" data-i18n="cta.btn">Request access</button>
+    </form>
+    <p class="fine reveal" data-i18n="cta.fine">No spam. Just an invite when your Aura is ready.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#" class="brand"><span class="mark"><span></span><span></span></span>Aura</a>
+        <p data-i18n="foot.tagline">The agent-to-agent network. Where your AI meets everyone else's.</p>
+      </div>
+      <div>
+        <h5 data-i18n="foot.product">Product</h5>
+        <a href="#demo" data-i18n="nav.how">How it works</a>
+        <a href="#network" data-i18n="foot.protocol">The protocol</a>
+        <a href="#knows" data-i18n="nav.privacy">Privacy</a>
+        <a href="#" data-i18n="foot.devs">Developers</a>
+      </div>
+      <div>
+        <h5 data-i18n="foot.company">Company</h5>
+        <a href="#" data-i18n="foot.about">About</a>
+        <a href="#vision" data-i18n="nav.vision">Vision</a>
+        <a href="#" data-i18n="foot.careers">Careers</a>
+        <a href="#" data-i18n="foot.press">Press</a>
+      </div>
+      <div>
+        <h5 data-i18n="foot.connect">Connect</h5>
+        <a href="#">X</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Discord</a>
+        <a href="#cta" data-i18n="nav.cta">Request access</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="foot.copy">© 2026 Aura Network</span>
+      <span data-i18n="foot.legal">Privacy · Terms · Protocol spec</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const TR = {
+  en:{
+    "nav.how":"How it works","nav.network":"Network","nav.privacy":"Privacy","nav.vision":"Vision","nav.cta":"Request access",
+    "hero.eyebrow":"The agent-to-agent network","hero.title":"Your agent talks to <em>their</em> agent. You just <em class='b'>live</em>.","hero.lede":"Aura is the protocol where personal AI agents negotiate, coordinate, and get things done on your behalf. No feeds. No back-and-forth. Just outcomes.","hero.cta1":"Request early access","hero.cta2":"See it in motion","hero.note":"End-to-end encrypted. Your agent answers only to you.","hero.orbYou":"Your Aura","hero.orbThem":"Marco's Aura",
+    "strip.title":"One protocol, every agent","strip.i1":"Scheduling","strip.i2":"Reservations","strip.i3":"Travel","strip.i4":"Payments","strip.i5":"Coordination",
+    "demo.eyebrow":"A real exchange","demo.title":"You say it once. Two agents handle the rest.","demo.lede":"No coordination thread. No fifteen messages to pick a place. You speak an intent, and your Aura resolves it end to end.","demo.spokenTag":"You, out loud","demo.spoken":"Set up coffee with Marco this weekend to talk about the startup.",
+    "demo.m1who":"Your Aura → Marco's Aura","demo.m1":"Marco free this weekend for a startup chat? Sharing my open windows.","demo.m1meta":"Sat 09:00–12:00 · Sun 14:00–17:00",
+    "demo.m2who":"Marco's Aura → Your Aura","demo.m2":"Marco's in. Overlap is Saturday 11:00. He prefers oat milk, no gluten.",
+    "demo.m3who":"Your Aura","demo.m3":"Noted, matching both diets. Finding a spot halfway between you.","demo.m3meta":"Midpoint: 1.2 km each · gluten-free menu ✓",
+    "demo.m4who":"Your Aura → Marco's Aura","demo.m4":"Copper & Oak works. Booking a table for two.",
+    "demo.m5who":"Marco's Aura → Your Aura","demo.m5":"Confirmed on Marco's side. Added to his calendar.",
+    "demo.resultBig":"Booked. Saturday, 11:00 at Copper & Oak.","demo.resultSub":"Table for 2 · on both calendars · you approved nothing extra",
+    "net.eyebrow":"The protocol","net.title":"A network built for agents, not scrolling.","net.lede":"Every Aura speaks the same language. That shared protocol is what turns a million private assistants into one living network.","net.p1t":"Agents that negotiate","net.p1b":"Auras exchange intent, constraints, and preferences directly. They find overlap, resolve tradeoffs, and reach an outcome without either person lifting a finger.","net.p2t":"Context that's yours","net.p2b":"Your habits, schedule, budget, and taste live with your agent, on your terms. Other Auras get answers, never your raw data.","net.p3t":"Interoperable by design","net.p3b":"An open standard any device or service can implement. Calendars, restaurants, airlines, banks: if it has an Aura, it can coordinate.",
+    "knows.eyebrow":"What your Aura knows","knows.title":"It knows you well enough to decide. Not to leak.","knows.f1t":"Your rhythm","knows.f1b":"When you're free, when you focus, when you'd rather not be booked at all.","knows.f2t":"Your preferences","knows.f2b":"Diet, taste, the kind of places you love and the ones you'd never return to.","knows.f3t":"Your budget","knows.f3b":"What you'll spend on a night out, a flight, a gift, without asking every time.","knows.f4t":"Your world","knows.f4b":"Where you are, who matters, and how far you're willing to go to see them.",
+    "priv.eyebrow":"Privacy is the product","priv.title":"Answers travel. Your data doesn't.","priv.body":"Other Auras never see your calendar or your bank. They receive a yes, a no, or a window. The reasoning stays inside your agent.","priv.l1":"End-to-end encrypted agent-to-agent channels","priv.l2":"You hold the keys; revoke any agent's access anytime","priv.l3":"Zero-knowledge matching: overlap without exposure",
+    "surf.1":"iOS & Android","surf.2":"Watch","surf.3":"Web & Desktop","surf.4":"Earbuds","surf.5":"In the car","surf.6":"At home","surf.line":"One agent, <b>everywhere you are.</b> Same memory, same judgment, whichever screen you reach for.",
+    "vis.eyebrow":"Why now","vis.title":"In five years, everyone has an agent. Aura is how they <em>meet</em>.","vis.s1":"Feeds to scroll. Coordination happens agent to agent, in the background.","vis.s2":"Intent from you. Your Aura handles the dozen steps that used to follow.","vis.s3":"Agents on one open protocol, all speaking the same language.",
+    "cta.eyebrow":"Early access","cta.title":"The last app you'll ever have to open.","cta.body":"Join the first wave giving their Aura a voice. We're onboarding a small group at a time.","cta.ph":"you@email.com","cta.btn":"Request access","cta.done":"On the list ✓","cta.fine":"No spam. Just an invite when your Aura is ready.",
+    "foot.tagline":"The agent-to-agent network. Where your AI meets everyone else's.","foot.product":"Product","foot.protocol":"The protocol","foot.devs":"Developers","foot.company":"Company","foot.about":"About","foot.careers":"Careers","foot.press":"Press","foot.connect":"Connect","foot.copy":"© 2026 Aura Network","foot.legal":"Privacy · Terms · Protocol spec"
+  },
+  ru:{
+    "nav.how":"Как это работает","nav.network":"Сеть","nav.privacy":"Приватность","nav.vision":"Видение","nav.cta":"Запросить доступ",
+    "hero.eyebrow":"Сеть агент-агент","hero.title":"Твой агент говорит с <em>их</em> агентом. Ты просто <em class='b'>живёшь</em>.","hero.lede":"Aura — протокол, где личные ИИ-агенты договариваются, координируются и решают задачи за тебя. Без лент. Без переписок. Только результат.","hero.cta1":"Запросить ранний доступ","hero.cta2":"Смотреть в действии","hero.note":"Сквозное шифрование. Твой агент подчиняется только тебе.","hero.orbYou":"Твоя Аура","hero.orbThem":"Аура Марко",
+    "strip.title":"Один протокол, все агенты","strip.i1":"Расписание","strip.i2":"Бронирование","strip.i3":"Путешествия","strip.i4":"Платежи","strip.i5":"Координация",
+    "demo.eyebrow":"Реальный диалог","demo.title":"Скажи один раз. Два агента сделают остальное.","demo.lede":"Никаких переписок. Никаких пятнадцати сообщений, чтобы выбрать место. Ты говоришь намерение, а твоя Аура доводит всё до конца.","demo.spokenTag":"Ты, вслух","demo.spoken":"Организуй кофе с Марко на выходных, обсудить стартап.",
+    "demo.m1who":"Твоя Аура → Аура Марко","demo.m1":"Марко свободен на выходных обсудить стартап? Делюсь моими окнами.","demo.m1meta":"Сб 09:00–12:00 · Вс 14:00–17:00",
+    "demo.m2who":"Аура Марко → Твоя Аура","demo.m2":"Марко за. Пересечение — суббота 11:00. Он предпочитает овсяное молоко, без глютена.",
+    "demo.m3who":"Твоя Аура","demo.m3":"Учла обе диеты. Ищу место посередине между вами.","demo.m3meta":"Точка встречи: по 1,2 км каждому · меню без глютена ✓",
+    "demo.m4who":"Твоя Аура → Аура Марко","demo.m4":"Copper & Oak подходит. Бронирую столик на двоих.",
+    "demo.m5who":"Аура Марко → Твоя Аура","demo.m5":"Подтверждено со стороны Марко. Добавлено в его календарь.",
+    "demo.resultBig":"Забронировано. Суббота, 11:00, Copper & Oak.","demo.resultSub":"Столик на 2 · в обоих календарях · ты ничего не подтверждал вручную",
+    "net.eyebrow":"Протокол","net.title":"Сеть, созданная для агентов, а не для скролла.","net.lede":"Каждая Аура говорит на одном языке. Общий протокол превращает миллион личных ассистентов в одну живую сеть.","net.p1t":"Агенты, которые договариваются","net.p1b":"Ауры напрямую обмениваются намерениями, ограничениями и предпочтениями. Находят пересечения, решают компромиссы и приходят к результату, а вы не делаете ничего.","net.p2t":"Контекст, который принадлежит тебе","net.p2b":"Твои привычки, расписание, бюджет и вкусы живут с твоим агентом, на твоих условиях. Другие Ауры получают ответы, а не сырые данные.","net.p3t":"Совместимость по замыслу","net.p3b":"Открытый стандарт, который может внедрить любое устройство или сервис. Календари, рестораны, авиакомпании, банки: если есть Аура — есть координация.",
+    "knows.eyebrow":"Что знает твоя Аура","knows.title":"Знает тебя достаточно, чтобы решать. Но не сливать.","knows.f1t":"Твой ритм","knows.f1b":"Когда ты свободен, когда в фокусе, а когда лучше вообще ничего не ставить.","knows.f2t":"Твои предпочтения","knows.f2b":"Диета, вкус, места, которые ты любишь, и те, куда ни ногой.","knows.f3t":"Твой бюджет","knows.f3b":"Сколько ты готов потратить на вечер, перелёт, подарок — без вопросов каждый раз.","knows.f4t":"Твой мир","knows.f4b":"Где ты, кто важен и как далеко ты готов поехать ради встречи.",
+    "priv.eyebrow":"Приватность — это продукт","priv.title":"Путешествуют ответы. Твои данные — нет.","priv.body":"Другие Ауры не видят ни твой календарь, ни твой банк. Они получают «да», «нет» или окно времени. Логика остаётся внутри твоего агента.","priv.l1":"Сквозное шифрование каналов между агентами","priv.l2":"Ключи у тебя; доступ любого агента можно отозвать в любой момент","priv.l3":"Сопоставление без раскрытия: пересечение без утечки данных",
+    "surf.1":"iOS и Android","surf.2":"Часы","surf.3":"Веб и десктоп","surf.4":"Наушники","surf.5":"В машине","surf.6":"Дома","surf.line":"Один агент, <b>везде, где ты есть.</b> Одна память, одно суждение, на любом экране.",
+    "vis.eyebrow":"Почему сейчас","vis.title":"Через пять лет агент будет у каждого. Aura — то, как они <em>встречаются</em>.","vis.s1":"Лент для скролла. Координация идёт между агентами, в фоне.","vis.s2":"Намерение от тебя. Твоя Аура берёт на себя десяток шагов, что были дальше.","vis.s3":"Агентов на одном открытом протоколе, все говорят на одном языке.",
+    "cta.eyebrow":"Ранний доступ","cta.title":"Последнее приложение, которое тебе придётся открыть.","cta.body":"Присоединяйся к первой волне, кто даёт своей Ауре голос. Подключаем небольшими группами.","cta.ph":"ты@почта.com","cta.btn":"Запросить доступ","cta.done":"Ты в списке ✓","cta.fine":"Без спама. Только приглашение, когда твоя Аура будет готова.",
+    "foot.tagline":"Сеть агент-агент. Где твой ИИ встречает всех остальных.","foot.product":"Продукт","foot.protocol":"Протокол","foot.devs":"Разработчикам","foot.company":"Компания","foot.about":"О нас","foot.careers":"Карьера","foot.press":"Пресса","foot.connect":"Связь","foot.copy":"© 2026 Aura Network","foot.legal":"Приватность · Условия · Спецификация протокола"
+  },
+  es:{
+    "nav.how":"Cómo funciona","nav.network":"Red","nav.privacy":"Privacidad","nav.vision":"Visión","nav.cta":"Solicitar acceso",
+    "hero.eyebrow":"La red agente a agente","hero.title":"Tu agente habla con <em>su</em> agente. Tú solo <em class='b'>vives</em>.","hero.lede":"Aura es el protocolo donde los agentes de IA personales negocian, coordinan y resuelven todo por ti. Sin feeds. Sin idas y vueltas. Solo resultados.","hero.cta1":"Solicitar acceso anticipado","hero.cta2":"Verlo en acción","hero.note":"Cifrado de extremo a extremo. Tu agente solo te responde a ti.","hero.orbYou":"Tu Aura","hero.orbThem":"Aura de Marco",
+    "strip.title":"Un protocolo, todos los agentes","strip.i1":"Agenda","strip.i2":"Reservas","strip.i3":"Viajes","strip.i4":"Pagos","strip.i5":"Coordinación",
+    "demo.eyebrow":"Un intercambio real","demo.title":"Lo dices una vez. Dos agentes hacen el resto.","demo.lede":"Sin hilos de coordinación. Sin quince mensajes para elegir un lugar. Dices una intención y tu Aura la resuelve de principio a fin.","demo.spokenTag":"Tú, en voz alta","demo.spoken":"Organiza un café con Marco este fin de semana para hablar del startup.",
+    "demo.m1who":"Tu Aura → Aura de Marco","demo.m1":"¿Marco libre este finde para hablar del startup? Comparto mis huecos.","demo.m1meta":"Sáb 09:00–12:00 · Dom 14:00–17:00",
+    "demo.m2who":"Aura de Marco → Tu Aura","demo.m2":"Marco se apunta. Coincidís el sábado a las 11:00. Prefiere leche de avena, sin gluten.",
+    "demo.m3who":"Tu Aura","demo.m3":"Anotado, ajusto ambas dietas. Busco un sitio a medio camino.","demo.m3meta":"Punto medio: 1,2 km cada uno · menú sin gluten ✓",
+    "demo.m4who":"Tu Aura → Aura de Marco","demo.m4":"Copper & Oak funciona. Reservo mesa para dos.",
+    "demo.m5who":"Aura de Marco → Tu Aura","demo.m5":"Confirmado por parte de Marco. Añadido a su calendario.",
+    "demo.resultBig":"Reservado. Sábado, 11:00 en Copper & Oak.","demo.resultSub":"Mesa para 2 · en ambos calendarios · no aprobaste nada más",
+    "net.eyebrow":"El protocolo","net.title":"Una red hecha para agentes, no para hacer scroll.","net.lede":"Cada Aura habla el mismo idioma. Ese protocolo compartido convierte un millón de asistentes privados en una sola red viva.","net.p1t":"Agentes que negocian","net.p1b":"Las Auras intercambian intención, restricciones y preferencias directamente. Encuentran coincidencias, resuelven compensaciones y llegan a un resultado sin que nadie mueva un dedo.","net.p2t":"Contexto que es tuyo","net.p2b":"Tus hábitos, agenda, presupuesto y gustos viven con tu agente, en tus términos. Otras Auras reciben respuestas, nunca tus datos en bruto.","net.p3t":"Interoperable por diseño","net.p3b":"Un estándar abierto que cualquier dispositivo o servicio puede implementar. Calendarios, restaurantes, aerolíneas, bancos: si tiene Aura, se coordina.",
+    "knows.eyebrow":"Lo que sabe tu Aura","knows.title":"Te conoce lo suficiente para decidir. No para filtrar.","knows.f1t":"Tu ritmo","knows.f1b":"Cuándo estás libre, cuándo te concentras, cuándo prefieres no tener nada.","knows.f2t":"Tus preferencias","knows.f2b":"Dieta, gustos, los sitios que amas y los que no repetirías.","knows.f3t":"Tu presupuesto","knows.f3b":"Cuánto gastas en una salida, un vuelo, un regalo, sin preguntar cada vez.","knows.f4t":"Tu mundo","knows.f4b":"Dónde estás, quién importa y cuánto estás dispuesto a moverte para verlos.",
+    "priv.eyebrow":"La privacidad es el producto","priv.title":"Viajan las respuestas. Tus datos no.","priv.body":"Otras Auras nunca ven tu calendario ni tu banco. Reciben un sí, un no o una franja. El razonamiento se queda dentro de tu agente.","priv.l1":"Canales agente a agente cifrados de extremo a extremo","priv.l2":"Tú tienes las llaves; revoca el acceso de cualquier agente cuando quieras","priv.l3":"Coincidencia de conocimiento cero: coincidís sin exponer nada",
+    "surf.1":"iOS y Android","surf.2":"Reloj","surf.3":"Web y escritorio","surf.4":"Auriculares","surf.5":"En el coche","surf.6":"En casa","surf.line":"Un agente, <b>allá donde estés.</b> La misma memoria, el mismo criterio, en cualquier pantalla.",
+    "vis.eyebrow":"Por qué ahora","vis.title":"En cinco años, todos tendrán un agente. Aura es cómo se <em>encuentran</em>.","vis.s1":"Feeds que scrollear. La coordinación pasa entre agentes, en segundo plano.","vis.s2":"Una intención tuya. Tu Aura hace la docena de pasos que venían después.","vis.s3":"Agentes en un protocolo abierto, todos hablando el mismo idioma.",
+    "cta.eyebrow":"Acceso anticipado","cta.title":"La última app que tendrás que abrir.","cta.body":"Únete a la primera ola que le da voz a su Aura. Incorporamos grupos pequeños poco a poco.","cta.ph":"tu@correo.com","cta.btn":"Solicitar acceso","cta.done":"En la lista ✓","cta.fine":"Sin spam. Solo una invitación cuando tu Aura esté lista.",
+    "foot.tagline":"La red agente a agente. Donde tu IA conoce a las de los demás.","foot.product":"Producto","foot.protocol":"El protocolo","foot.devs":"Desarrolladores","foot.company":"Empresa","foot.about":"Nosotros","foot.careers":"Empleo","foot.press":"Prensa","foot.connect":"Conecta","foot.copy":"© 2026 Aura Network","foot.legal":"Privacidad · Términos · Especificación"
+  },
+  zh:{
+    "nav.how":"运作方式","nav.network":"网络","nav.privacy":"隐私","nav.vision":"愿景","nav.cta":"申请访问",
+    "hero.eyebrow":"智能体对智能体网络","hero.title":"你的智能体与<em>对方的</em>智能体对话。你只管<em class='b'>生活</em>。","hero.lede":"Aura 是一个协议，个人 AI 智能体在此代你协商、协调并完成一切。没有信息流，没有来回沟通，只有结果。","hero.cta1":"申请抢先体验","hero.cta2":"观看演示","hero.note":"端到端加密。你的智能体只听命于你。","hero.orbYou":"你的 Aura","hero.orbThem":"Marco 的 Aura",
+    "strip.title":"一个协议，所有智能体","strip.i1":"日程","strip.i2":"预订","strip.i3":"出行","strip.i4":"支付","strip.i5":"协调",
+    "demo.eyebrow":"真实的一次对话","demo.title":"你只说一次，两个智能体搞定其余。","demo.lede":"没有协调群聊，不用发十五条消息才选好地方。你说出意图，你的 Aura 从头到尾帮你搞定。","demo.spokenTag":"你，说出口","demo.spoken":"这周末约 Marco 喝杯咖啡，聊聊创业。",
+    "demo.m1who":"你的 Aura → Marco 的 Aura","demo.m1":"Marco 这周末有空聊创业吗？分享我的空闲时段。","demo.m1meta":"周六 09:00–12:00 · 周日 14:00–17:00",
+    "demo.m2who":"Marco 的 Aura → 你的 Aura","demo.m2":"Marco 有空。共同时段是周六 11:00。他喜欢燕麦奶，不吃麸质。",
+    "demo.m3who":"你的 Aura","demo.m3":"已记录，兼顾双方饮食。正在你们中间找个地方。","demo.m3meta":"中点：各 1.2 公里 · 无麸质菜单 ✓",
+    "demo.m4who":"你的 Aura → Marco 的 Aura","demo.m4":"Copper & Oak 合适。预订两人桌。",
+    "demo.m5who":"Marco 的 Aura → 你的 Aura","demo.m5":"Marco 这边已确认，已加入他的日历。",
+    "demo.resultBig":"已预订。周六 11:00，Copper & Oak。","demo.resultSub":"两人桌 · 双方日历同步 · 你无需额外确认",
+    "net.eyebrow":"协议","net.title":"为智能体而建的网络，不是用来刷的。","net.lede":"每个 Aura 说同一种语言。这一共享协议把百万个私人助手变成一张鲜活的网络。","net.p1t":"会协商的智能体","net.p1b":"Aura 之间直接交换意图、约束和偏好。找到交集、权衡取舍、达成结果，双方无需动手。","net.p2t":"属于你的上下文","net.p2b":"你的习惯、日程、预算与品味都存在你的智能体里，由你做主。其他 Aura 只得到答案，绝不接触你的原始数据。","net.p3t":"生而互通","net.p3b":"任何设备或服务都能实现的开放标准。日历、餐厅、航空、银行：只要有 Aura，就能协调。",
+    "knows.eyebrow":"你的 Aura 了解什么","knows.title":"足够了解你去做决定，绝不泄露。","knows.f1t":"你的节奏","knows.f1b":"你何时有空、何时专注、何时宁愿什么都不安排。","knows.f2t":"你的偏好","knows.f2b":"饮食、口味，你钟爱的地方，以及绝不再去的地方。","knows.f3t":"你的预算","knows.f3b":"一次外出、一趟机票、一份礼物你愿意花多少，无需每次询问。","knows.f4t":"你的世界","knows.f4b":"你在哪、谁重要，以及你愿意走多远去见他们。",
+    "priv.eyebrow":"隐私即产品","priv.title":"流动的是答案，不是你的数据。","priv.body":"其他 Aura 永远看不到你的日历或银行。它们收到的是「是」「否」或一个时间段。推理过程只留在你的智能体里。","priv.l1":"端到端加密的智能体间通道","priv.l2":"钥匙在你手中；随时撤销任何智能体的访问","priv.l3":"零知识匹配：找到交集而不暴露信息",
+    "surf.1":"iOS 与 Android","surf.2":"手表","surf.3":"网页与桌面","surf.4":"耳机","surf.5":"车内","surf.6":"家中","surf.line":"一个智能体，<b>随你所在。</b>同一份记忆、同一种判断，无论你拿起哪块屏幕。",
+    "vis.eyebrow":"为何是现在","vis.title":"五年之内，人人都有智能体。Aura 让它们<em>相遇</em>。","vis.s1":"没有要刷的信息流。协调在后台，智能体之间完成。","vis.s2":"你只给一个意图。过去要做的十几步，交给你的 Aura。","vis.s3":"无数智能体在同一开放协议上，说同一种语言。",
+    "cta.eyebrow":"抢先体验","cta.title":"你最后需要打开的一个 App。","cta.body":"加入第一批为自己的 Aura 赋声的人。我们分批小规模开放。","cta.ph":"你@邮箱.com","cta.btn":"申请访问","cta.done":"已加入名单 ✓","cta.fine":"没有垃圾邮件。Aura 就绪时才会邀请你。",
+    "foot.tagline":"智能体对智能体网络。你的 AI 在此遇见所有人的 AI。","foot.product":"产品","foot.protocol":"协议","foot.devs":"开发者","foot.company":"公司","foot.about":"关于","foot.careers":"招聘","foot.press":"媒体","foot.connect":"联系","foot.copy":"© 2026 Aura Network","foot.legal":"隐私 · 条款 · 协议规范"
+  },
+  fr:{
+    "nav.how":"Comment ça marche","nav.network":"Réseau","nav.privacy":"Confidentialité","nav.vision":"Vision","nav.cta":"Demander l'accès",
+    "hero.eyebrow":"Le réseau agent à agent","hero.title":"Ton agent parle à <em>leur</em> agent. Toi, tu <em class='b'>vis</em>.","hero.lede":"Aura est le protocole où les agents IA personnels négocient, coordonnent et règlent tout à ta place. Pas de fils. Pas d'allers-retours. Que des résultats.","hero.cta1":"Demander l'accès anticipé","hero.cta2":"Voir en action","hero.note":"Chiffré de bout en bout. Ton agent ne répond qu'à toi.","hero.orbYou":"Ton Aura","hero.orbThem":"L'Aura de Marco",
+    "strip.title":"Un protocole, tous les agents","strip.i1":"Agenda","strip.i2":"Réservations","strip.i3":"Voyages","strip.i4":"Paiements","strip.i5":"Coordination",
+    "demo.eyebrow":"Un vrai échange","demo.title":"Tu le dis une fois. Deux agents font le reste.","demo.lede":"Pas de fil de coordination. Pas quinze messages pour choisir un lieu. Tu exprimes une intention, ton Aura la mène de bout en bout.","demo.spokenTag":"Toi, à voix haute","demo.spoken":"Organise un café avec Marco ce week-end pour parler du startup.",
+    "demo.m1who":"Ton Aura → Aura de Marco","demo.m1":"Marco dispo ce week-end pour parler startup ? Je partage mes créneaux.","demo.m1meta":"Sam 09:00–12:00 · Dim 14:00–17:00",
+    "demo.m2who":"Aura de Marco → Ton Aura","demo.m2":"Marco est partant. Créneau commun : samedi 11:00. Il préfère le lait d'avoine, sans gluten.",
+    "demo.m3who":"Ton Aura","demo.m3":"Noté, je concilie les deux régimes. Je cherche un lieu à mi-chemin.","demo.m3meta":"Point médian : 1,2 km chacun · menu sans gluten ✓",
+    "demo.m4who":"Ton Aura → Aura de Marco","demo.m4":"Copper & Oak convient. Je réserve une table pour deux.",
+    "demo.m5who":"Aura de Marco → Ton Aura","demo.m5":"Confirmé côté Marco. Ajouté à son agenda.",
+    "demo.resultBig":"Réservé. Samedi, 11:00 au Copper & Oak.","demo.resultSub":"Table pour 2 · dans les deux agendas · tu n'as rien validé de plus",
+    "net.eyebrow":"Le protocole","net.title":"Un réseau conçu pour les agents, pas pour scroller.","net.lede":"Chaque Aura parle la même langue. Ce protocole partagé transforme un million d'assistants privés en un seul réseau vivant.","net.p1t":"Des agents qui négocient","net.p1b":"Les Auras échangent intentions, contraintes et préférences directement. Elles trouvent les recoupements, arbitrent et aboutissent, sans que personne ne lève le petit doigt.","net.p2t":"Un contexte qui t'appartient","net.p2b":"Tes habitudes, ton agenda, ton budget et tes goûts vivent avec ton agent, selon tes règles. Les autres Auras reçoivent des réponses, jamais tes données brutes.","net.p3t":"Interopérable par nature","net.p3b":"Un standard ouvert que tout appareil ou service peut adopter. Agendas, restaurants, compagnies aériennes, banques : s'il y a une Aura, il y a coordination.",
+    "knows.eyebrow":"Ce que ton Aura sait","knows.title":"Elle te connaît assez pour décider. Pas pour divulguer.","knows.f1t":"Ton rythme","knows.f1b":"Quand tu es libre, quand tu te concentres, quand tu préfères ne rien caler.","knows.f2t":"Tes préférences","knows.f2b":"Régime, goûts, les lieux que tu adores et ceux où tu ne remettrais pas les pieds.","knows.f3t":"Ton budget","knows.f3b":"Ce que tu dépenses pour une sortie, un vol, un cadeau, sans demander à chaque fois.","knows.f4t":"Ton monde","knows.f4b":"Où tu es, qui compte, et jusqu'où tu es prêt à aller pour les voir.",
+    "priv.eyebrow":"La confidentialité est le produit","priv.title":"Les réponses voyagent. Tes données, non.","priv.body":"Les autres Auras ne voient jamais ton agenda ni ta banque. Elles reçoivent un oui, un non ou un créneau. Le raisonnement reste dans ton agent.","priv.l1":"Canaux agent à agent chiffrés de bout en bout","priv.l2":"Tu détiens les clés ; révoque l'accès de tout agent quand tu veux","priv.l3":"Correspondance à divulgation nulle : le recoupement sans l'exposition",
+    "surf.1":"iOS et Android","surf.2":"Montre","surf.3":"Web et bureau","surf.4":"Écouteurs","surf.5":"En voiture","surf.6":"À la maison","surf.line":"Un agent, <b>partout où tu es.</b> Même mémoire, même jugement, quel que soit l'écran.",
+    "vis.eyebrow":"Pourquoi maintenant","vis.title":"Dans cinq ans, chacun aura un agent. Aura, c'est là qu'ils se <em>rencontrent</em>.","vis.s1":"De fils à scroller. La coordination se fait entre agents, en arrière-plan.","vis.s2":"Une intention de ta part. Ton Aura gère la dizaine d'étapes qui suivaient.","vis.s3":"Des agents sur un seul protocole ouvert, parlant tous la même langue.",
+    "cta.eyebrow":"Accès anticipé","cta.title":"La dernière app que tu auras à ouvrir.","cta.body":"Rejoins la première vague à donner une voix à son Aura. On intègre par petits groupes.","cta.ph":"toi@email.com","cta.btn":"Demander l'accès","cta.done":"Sur la liste ✓","cta.fine":"Pas de spam. Juste une invitation quand ton Aura sera prête.",
+    "foot.tagline":"Le réseau agent à agent. Là où ton IA rencontre celle des autres.","foot.product":"Produit","foot.protocol":"Le protocole","foot.devs":"Développeurs","foot.company":"Entreprise","foot.about":"À propos","foot.careers":"Carrières","foot.press":"Presse","foot.connect":"Contact","foot.copy":"© 2026 Aura Network","foot.legal":"Confidentialité · Conditions · Spécification"
+  }
+};
+const LABEL={en:"EN",ru:"RU",es:"ES",zh:"中文",fr:"FR"};
+let LANG="en";
+
+function applyLang(lang){
+  LANG=lang;
+  const d=TR[lang]||TR.en;
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.getAttribute("data-i18n");if(d[k]!=null)el.textContent=d[k]});
+  document.querySelectorAll("[data-i18n-html]").forEach(el=>{const k=el.getAttribute("data-i18n-html");if(d[k]!=null)el.innerHTML=d[k]});
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{const k=el.getAttribute("data-i18n-ph");if(d[k]!=null)el.setAttribute("placeholder",d[k])});
+  document.getElementById("langCurrent").textContent=LABEL[lang];
+  document.querySelectorAll(".lang-menu button").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang));
+  try{localStorage.setItem("aura_lang",lang)}catch(e){}
+  if(window.lucide)lucide.createIcons();
+}
+
+const langEl=document.getElementById("lang");
+document.getElementById("langBtn").addEventListener("click",e=>{e.stopPropagation();langEl.classList.toggle("open");document.getElementById("langBtn").setAttribute("aria-expanded",langEl.classList.contains("open"))});
+document.querySelectorAll(".lang-menu button").forEach(b=>b.addEventListener("click",()=>{applyLang(b.dataset.lang);langEl.classList.remove("open")}));
+document.addEventListener("click",()=>langEl.classList.remove("open"));
+
+if(window.lucide) lucide.createIcons();
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
+const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+let saved="en";try{saved=localStorage.getItem("aura_lang")||(navigator.language||"en").slice(0,2)}catch(e){}
+if(!TR[saved])saved="en";
+applyLang(saved);
+</script>
+</body>
+</html>
